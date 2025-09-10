@@ -1,1 +1,110 @@
+:root {
+  --bg: #0f172a;          /* 侧栏背景（深蓝） */
+  --fg: #e2e8f0;          /* 侧栏文字（浅灰） */
+  --accent: #38bdf8;      /* 高亮色（青色） */
+  --muted: #94a3b8;       /* 次要文字 */
+  --content-bg: #ffffff;  /* 内容区背景 */
+  --border: #e5e7eb;
+  --shadow: 0 10px 28px rgba(2,8,23,.08);
+  --radius: 14px;
+  --font: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { font-family: var(--font); color: #0f172a; background: #f8fafc; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* 侧边栏 */
+.sidebar {
+  background: var(--bg);
+  color: var(--fg);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.brand .subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.nav-item {
+  display: block;
+  text-decoration: none;
+  color: var(--fg);
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background .2s ease, color .2s ease;
+}
+.nav-item:hover { background: rgba(148,163,184,.15); }
+.nav-item.active {
+  background: rgba(56,189,248,.18);
+  color: #e0f2fe;
+  border: 1px solid rgba(56,189,248,.35);
+}
+
+.links {
+  margin-top: auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+}
+.links a:hover { color: var(--fg); }
+
+/* 内容区 */
+.content {
+  padding: 22px;
+}
+#viewer {
+  width: 100%;
+  min-height: calc(100vh - 44px);
+  border: 1px solid var(--border);
+  background: var(--content-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* 响应式（窄屏时侧栏收缩到上方） */
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    height: auto;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    border-right: none;
+  }
+  #viewer {
+    min-height: 70vh;
+  }
+}
 
