@@ -1,1 +1,64 @@
+/* 统一代码框外观（适配 Quarto/Pandoc 的结构：.sourceCode + <pre><code>） */
+.sourceCode, pre > code, pre code {
+  font-family: Consolas, Monaco, "Courier New", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+div.sourceCode {
+  background: #f3f4f6;           /* 浅灰背景 */
+  border: 1px solid #e5e7eb;     /* 细边框 */
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+  overflow: auto;
+}
+
+/* 去掉 Quarto 生成的多余内边距差异，保证紧凑 */
+div.sourceCode pre {
+  margin: 0;
+  padding: 14px 16px;
+}
+
+/* 行号（如果开启了 code-line-numbers） */
+pre.numberSource code > span {
+  padding-left: 0.75em;
+  border-left: 1px solid #e5e7eb;
+}
+pre.numberSource code > span > a:first-child::before {
+  color: #9ca3af;       /* 行号颜色 */
+}
+
+/* 复制按钮（code-copy: true 时）微调 */
+.code-with-copy button.code-copy-button {
+  top: 8px;
+  right: 8px;
+  border-radius: 8px;
+  background: #ffffffcc;
+  border: 1px solid #e5e7eb;
+}
+.code-with-copy button.code-copy-button:hover {
+  background: #fff;
+}
+
+/* 行内代码外观 */
+code:not(pre code) {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* 暗色模式（如果用户系统是暗色）可稍作适配 */
+@media (prefers-color-scheme: dark) {
+  div.sourceCode {
+    background: #111827;
+    border-color: #1f2937;
+    box-shadow: none;
+  }
+  code:not(pre code) {
+    background: #1f2937;
+    border-color: #374151;
+    color: #e5e7eb;
+  }
+}
 
