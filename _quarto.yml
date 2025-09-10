@@ -1,11 +1,13 @@
 project:
   type: website
-  # 若用 GitHub Pages 的 docs 目录，取消注释下一行
+  # 如果你把 Pages 设成输出到 docs/，就加上下一行
   # output-dir: docs
 
 format:
   html:
-    theme: cosmo        # 主题任选
-    highlight-style: github  # 代码配色（可选：atom-one, dracula, monokai等）
-    code-copy: true     # 右上角 copy 按钮（Quarto 1.4+）
-    css: assets/quarto-overrides.css  # 👈 自定义样式（见下一步）
+    theme: cosmo
+    highlight-style: github     # 代码配色：github / monokai / dracula / atom-one ...
+    code-copy: true             # 代码块右上角复制按钮
+    code-line-numbers: false    # 需要行号就改成 true
+    css: assets/quarto-overrides.css  # 自定义代码框样式（下一步）
+
