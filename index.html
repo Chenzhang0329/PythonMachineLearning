@@ -3,64 +3,63 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>STA314 环境搭建指南</title>
-
-  <!-- 轻量美观的 CSS 框架（CDN，https，GitHub Pages 可直接加载） -->
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
-
-  <!-- 推荐：加些描述/社交分享元信息 -->
-  <meta name="description" content="STA314 环境搭建：VS Code、Jupyter、虚拟环境、常用包与验证步骤。">
-  <meta property="og:title" content="STA314 环境搭建指南">
-  <meta property="og:description" content="VS Code、Jupyter、虚拟环境、常用包与验证步骤。">
-  <meta property="og:type" content="website">
-
-  <style>
-    :root { --pico-font-size: 16px; }
-    header, main { max-width: 980px; margin: 0 auto; }
-    header { padding: 1.5rem 1rem 0; }
-    main { padding: 2rem 1rem 4rem; }
-    iframe {
-      width: 100%;
-      border: 0;
-      min-height: 70vh;              /* 初始高度 */
-      background: #fff;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      border-radius: 14px;
-    }
-    .topbar {
-      background: var(--pico-background-color);
-      border-bottom: 1px solid rgba(0,0,0,.08);
-    }
-    .ext-links { display:flex; gap:.75rem; align-items:center; }
-  </style>
+  <title>Zoe · Courses</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <!-- 可选：系统字体 + 细节优化 -->
+  <meta name="description" content="Zoe 的课程主页（Python / ML / VS Code / Jupyter）" />
 </head>
 <body>
-  <nav class="container-fluid topbar">
-    <ul>
-      <li><strong>PythonMachineLearning</strong></li>
-    </ul>
-    <ul class="ext-links">
-      <li><a href="https://github.com/Chenzhang0329/PythonMachineLearning" target="_blank" rel="noopener">GitHub 仓库</a></li>
-      <li><a href="setup_guide.html" target="_blank" rel="noopener">打开原始 HTML</a></li>
-    </ul>
-  </nav>
+  <div class="layout">
+    <!-- 左侧侧边栏 -->
+    <aside class="sidebar">
+      <div class="brand">
+        <!-- 可换成你的 logo.png -->
+        <!-- <img src="assets/logo.png" alt="Logo" /> -->
+        <h1>Zoe · Courses</h1>
+        <p class="subtitle">Python · ML · Tools</p>
+      </div>
 
-  <header>
-    <hgroup>
-      <h1>STA314 环境搭建指南</h1>
-      <p>VS Code · Jupyter · 虚拟环境 · 常用包 · 验证步骤</p>
-    </hgroup>
-  </header>
+      <nav class="nav">
+        <!-- data-src 指向右侧要加载的课程页面 -->
+        <a class="nav-item" href="#class1" data-src="lessons/class1.html">Class 1 · 环境搭建</a>
+        <a class="nav-item" href="#class2" data-src="lessons/class2.html">Class 2 · （占位）数据探索</a>
+        <!-- 以后新增课程，只需复制一行，改 data-src 与文字 -->
+      </nav>
 
-  <main>
-    <!-- 用 iframe 内嵌你的内容页：路径与文件名保持一致 -->
-    <iframe id="guide" src="Class 1 环境搭建.html" title="环境搭建指南"></iframe>
-  </main>
+      <div class="links">
+        <a href="https://github.com/Chenzhang0329" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/Chenzhang0329/PythonMachineLearning" target="_blank" rel="noopener">Repo</a>
+      </div>
+    </aside>
+
+    <!-- 右侧内容区：用 iframe 加载各课 HTML -->
+    <main class="content">
+      <iframe id="viewer" title="Course Content" src="" loading="lazy"></iframe>
+    </main>
+  </div>
 
   <script>
-    // 自适应 iframe 高度 —— 仅在同源（同域名+路径）时生效（本方案满足）
-    const iframe = document.getElementById('guide');
-    function resize() {
+    // 简单路由：依据 hash (#class1 等) 或默认加载第一个
+    const links = Array.from(document.querySelectorAll('.nav-item'));
+    const iframe = document.getElementById('viewer');
+
+    function loadByHash() {
+      const hash = location.hash || '#class1'; // 默认加载 class1
+      const target = links.find(a => a.getAttribute('href') === hash) || links[0];
+      if (!target) return;
+
+      // 设置 iframe src
+      const src = target.getAttribute('data-src');
+      if (iframe.getAttribute('src') !== src) {
+        iframe.setAttribute('src', src);
+      }
+
+      // 高亮当前项
+      links.forEach(a => a.classList.toggle('active', a === target));
+    }
+
+    // 自适应高度（同源时可读内部文档高度；我们同仓库/同域，OK）
+    function resizeIframe() {
       try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         if (!doc) return;
@@ -68,17 +67,21 @@
           doc.body.scrollHeight, doc.documentElement.scrollHeight,
           doc.body.offsetHeight, doc.documentElement.offsetHeight
         );
-        iframe.style.height = (h + 20) + 'px';
-      } catch (e) { /* ignore */ }
+        iframe.style.height = Math.max(h + 20, window.innerHeight - 32) + 'px';
+      } catch (e) { /* ignore cross-origin */ }
     }
-    iframe.addEventListener('load', resize);
-    window.addEventListener('resize', resize);
-    // 预防图片/字体懒加载带来的高度变化
-    let ticks = 0;
-    const timer = setInterval(() => {
-      resize();
-      if (++ticks > 20) clearInterval(timer);
-    }, 800);
+
+    window.addEventListener('hashchange', () => { loadByHash(); });
+    iframe.addEventListener('load', () => {
+      resizeIframe();
+      // 图片/字体懒加载的二次调整
+      let ticks = 0;
+      const t = setInterval(() => { resizeIframe(); if (++ticks > 20) clearInterval(t); }, 700);
+    });
+
+    // 初次进入
+    loadByHash();
+    window.addEventListener('resize', resizeIframe);
   </script>
 </body>
 </html>
